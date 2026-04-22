@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LLA — Vertientes Tuiteras</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #2BA8D4;
+      --purple:  #8B4FC8;
+      --pink:    #D4197A;
+      --yellow:  #F0C020;
+      --lavender:#9E7AC8;
+      --red:     #D43028;
+      --dark:    #111318;
+      --mid:     #1C1F28;
+      --light:   #E8ECF2;
+      --font-title: 'Bebas Neue', sans-serif;
+      --font-body:  'DM Sans', sans-serif;
+    }
+
+    html { font-family: var(--font-body); background: var(--dark); color: var(--light); }
+
+    .site-header {
+      text-align: center;
+      padding: 52px 24px 36px;
+      background: var(--mid);
+      border-bottom: 3px solid #ffffff18;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 120% at 50% 0%, #8B4FC622 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .site-header .eyebrow {
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #ffffff55;
+      margin-bottom: 10px;
+    }
+    .site-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      letter-spacing: .08em;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 30%, #c8a0ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .site-header .subtitle {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #ffffff44;
+      letter-spacing: .06em;
+    }
+
+    .org-wrapper {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+    }
+
+    .section-label {
+      font-family: var(--font-title);
+      font-size: 11px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #ffffff55;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .top-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .panel {
+      border-radius: 18px;
+      padding: 22px 18px 22px;
+      animation: fadeUp .5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel--blue    { background: #1D5F80; border: 2px solid #2BA8D4; }
+    .panel--purple  { background: #4A2878; border: 2px solid #8B4FC8; }
+    .panel--pink    { background: #78104A; border: 2px solid #D4197A; }
+    .panel--yellow  { background: #7A6010; border: 2px solid #F0C020; }
+    .panel--lavender{ background: #38265C; border: 2px solid #9E7AC8; }
+    .panel--red     { background: #6E1814; border: 2px solid #D43028; }
+
+    .leader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .leader-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-title);
+      font-size: 26px;
+      color: #fff;
+      margin-bottom: 10px;
+      border: 3px solid #ffffff44;
+      box-shadow: 0 0 24px #00000055;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: transform .2s;
+    }
+    .leader-avatar:hover { transform: scale(1.07); }
+    .leader-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .leader-name {
+      font-family: var(--font-title);
+      font-size: 14px;
+      letter-spacing: .18em;
+      text-align: center;
+      color: #ffffffcc;
+    }
+
+    .panel-title {
+      font-family: var(--font-title);
+      font-size: 13px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: #00000030;
+      border: 1px solid #ffffff22;
+      margin-bottom: 18px;
+      color: #ffffffcc;
+    }
+
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+      gap: 14px 10px;
+    }
+
+    .member {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      cursor: default;
+      transition: transform .15s;
+    }
+    .member:hover { transform: translateY(-3px); }
+
+    .member-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-title);
+      font-size: 18px;
+      color: #fff;
+      border: 2px solid #ffffff30;
+      box-shadow: 0 4px 12px #00000040;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .member-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .member-name {
+      font-size: 10px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #ffffffbb;
+    }
+
+    .sub-panel {
+      border-radius: 12px;
+      padding: 16px 14px;
+      margin-top: 16px;
+    }
+    .sub-panel--yellow { background: #5A4508; border: 2px solid #F0C020; }
+    .sub-panel .panel-title { font-size: 11px; margin-bottom: 14px; }
+
+    /* sub-panel leader row */
+    .sub-leader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .sub-leader-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-title);
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 7px;
+      border: 2px solid #ffffff55;
+      box-shadow: 0 0 16px #00000044;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: transform .2s;
+    }
+    .sub-leader-avatar:hover { transform: scale(1.07); }
+    .sub-leader-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sub-leader-name {
+      font-family: var(--font-title);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-align: center;
+      color: #ffffffcc;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 44px 0 28px;
+    }
+    .divider hr { flex: 1; border: none; border-top: 2px solid #ffffff14; }
+    .divider-label { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: #ffffff30; white-space: nowrap; }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* avatar fallback colours */
+    .av-blue     { background: linear-gradient(135deg, #2BA8D4, #1A6E8C); }
+    .av-purple   { background: linear-gradient(135deg, #8B4FC8, #5A2888); }
+    .av-pink     { background: linear-gradient(135deg, #D4197A, #8C1050); }
+    .av-yellow   { background: linear-gradient(135deg, #F0C020, #A07C10); }
+    .av-lavender { background: linear-gradient(135deg, #9E7AC8, #6050A0); }
+    .av-red      { background: linear-gradient(135deg, #D43028, #8C1C18); }
+
+    .tip { text-align: center; font-size: 11px; color: #ffffff22; letter-spacing: .06em; margin-top: 48px; }
+
+    /* ── Status messages ── */
+    #loading {
+      text-align: center;
+      padding: 80px 20px;
+      font-size: 14px;
+      color: #ffffff44;
+      letter-spacing: .1em;
+    }
+    #error-msg {
+      display: none;
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 13px;
+      color: #F0C020;
+      background: #7A601022;
+      border: 1px solid #F0C02044;
+      border-radius: 12px;
+      margin: 0 auto 28px;
+      max-width: 680px;
+      line-height: 1.8;
+    }
+    #error-msg code {
+      background: #00000040;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    @media (max-width: 860px) {
+      .top-row, .bottom-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="eyebrow">La Libertad Avanza · Argentina</p>
+  <h1>LLA Vertientes Tuiteras</h1>
+  <p class="subtitle">Mapa de facciones del ecosistema libertario en redes sociales</p>
+</header>
+
+<div class="org-wrapper">
+  <div id="loading">Cargando iconos.csv…</div>
+  <div id="error-msg"></div>
+  <div id="chart" style="display:none"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  ESTRUCTURA DEL ORGANIGRAMA
+//  "id" debe coincidir EXACTAMENTE con la columna "id" del CSV
+// ══════════════════════════════════════════════════════════
+const ORG = {
+  top: [
+    {
+      panelClass: 'panel--blue',
+      leader: { id: 'karinista', fallback: 'K', color: 'av-blue' },
+      leaderLabel: 'Línea Karinista',
+      direct: [],
+      subs: [
+        {
+          title: 'Línea Limonista',
+          leader: { id: 'lilia_lemoine', fallback: 'LL', color: 'av-yellow' },
+          members: [
+            { id: 'eliana',          fallback: 'E',  color: 'av-yellow' },
+            { id: 'cande',           fallback: 'C',  color: 'av-yellow' },
+            { id: 'lu_palavecino',   fallback: 'LP', color: 'av-yellow' },
+            { id: 'mia_noparejista', fallback: 'M',  color: 'av-yellow' },
+          ]
+        }
+      ]
+    },
+    {
+      panelClass: 'panel--purple',
+      leader: { id: 'mileista', fallback: 'JM', color: 'av-purple' },
+      leaderLabel: 'Línea Mileista',
+      direct: [
+        { id: 'johnny_ars', fallback: 'JA', color: 'av-purple' },
+      ],
+      subs: [
+        {
+          title: 'Línea Bulrichista',
+          leader: { id: 'patricia_bullrich', fallback: 'PB', color: 'av-yellow' },
+          members: [
+            { id: 'ivan_cerrajero', fallback: 'IC', color: 'av-yellow' },
+            { id: 'natalin',        fallback: 'N',  color: 'av-yellow' },
+          ]
+        }
+      ]
+    },
+    {
+      panelClass: 'panel--pink',
+      leader: { id: 'caputista', fallback: 'LC', color: 'av-pink' },
+      leaderLabel: 'Línea Caputista',
+      direct: [
+        { id: 'pablo',         fallback: 'P',  color: 'av-pink' },
+        { id: 'gordo_dan',     fallback: 'GD', color: 'av-pink' },
+        { id: 'traductor',     fallback: 'T',  color: 'av-pink' },
+        { id: 'sanibu',        fallback: 'S',  color: 'av-pink' },
+        { id: 'barbie',        fallback: 'B',  color: 'av-pink' },
+        { id: 'mia',           fallback: 'Mi', color: 'av-pink' },
+        { id: 'oraculo_tl',    fallback: 'OT', color: 'av-pink' },
+        { id: 'marilu',        fallback: 'ML', color: 'av-pink' },
+      ],
+      subs: []
+    }
+  ],
+  bottom: [
+    {
+      panelClass: 'panel--lavender',
+      title: 'Liberales',
+      members: [
+        { id: 'marra',        fallback: 'Mr', color: 'av-lavender' },
+        { id: 'fede_machado', fallback: 'FM', color: 'av-lavender' },
+        { id: 'palandristas', fallback: 'PL', color: 'av-lavender' },
+        { id: 'tipito',       fallback: 'Ti', color: 'av-lavender' },
+      ]
+    },
+    {
+      panelClass: 'panel--yellow',
+      title: 'Viudas de Milei',
+      members: [
+        { id: 'lopez_murphy', fallback: 'LM', color: 'av-yellow' },
+        { id: 'cachanoski',   fallback: 'Ca', color: 'av-yellow' },
+        { id: 'giacomini',    fallback: 'Gi', color: 'av-yellow' },
+      ]
+    },
+    {
+      panelClass: 'panel--red',
+      title: 'Línea Disca',
+      members: [
+        { id: 'marianito',       fallback: 'Mn', color: 'av-red' },
+        { id: 'fijap',           fallback: 'Fj', color: 'av-red' },
+        { id: 'palazzo',         fallback: 'Pz', color: 'av-red' },
+        { id: 'nicolas_marquez', fallback: 'NM', color: 'av-red' },
+        { id: 'ozzi_barbie',     fallback: 'OB', color: 'av-red' },
+      ]
+    }
+  ]
+};
+
+// ══════════════════════════════════════════════════════════
+//  CSV PARSER
+//  Soporta separador coma o punto y coma, y campos con comillas
+// ══════════════════════════════════════════════════════════
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/).filter(Boolean);
+  if (lines.length < 2) return {};
+
+  const sep = lines[0].includes(';') ? ';' : ',';
+  const clean = s => s.trim().replace(/^["']|["']$/g, '');
+  const headers = lines[0].split(sep).map(h => clean(h).toLowerCase());
+
+  const idIdx   = headers.indexOf('id');
+  const nameIdx = headers.indexOf('nombre');
+  const iconIdx = headers.indexOf('icono');
+
+  if (idIdx === -1) throw new Error('El CSV necesita una columna llamada <code>id</code>');
+
+  const map = {};
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(sep).map(clean);
+    const id = cols[idIdx];
+    if (!id) continue;
+    map[id] = {
+      nombre: nameIdx !== -1 ? cols[nameIdx] : '',
+      icono:  iconIdx !== -1 ? cols[iconIdx] : ''
+    };
+  }
+  return map;
+}
+
+// ══════════════════════════════════════════════════════════
+//  HELPERS DE RENDER
+// ══════════════════════════════════════════════════════════
+let DATA = {};
+
+function getName(id, fallback) {
+  return (DATA[id] && DATA[id].nombre) ? DATA[id].nombre : fallback;
+}
+
+function avatarTag(id, fallback, colorClass, isLeader = false) {
+  const cls    = isLeader ? 'leader-avatar' : 'member-avatar';
+  const entry  = DATA[id];
+  const icono  = entry && entry.icono ? entry.icono.trim() : '';
+
+  if (icono) {
+    // If image fails to load → show fallback initials
+    return `<div class="${cls} ${colorClass}">
+      <img src="iconos/${icono}" alt="${fallback}"
+        onerror="this.style.display='none'; this.parentElement.innerHTML='${fallback}'"/>
+    </div>`;
+  }
+  return `<div class="${cls} ${colorClass}">${fallback}</div>`;
+}
+
+function memberHTML(m) {
+  return `
+    <div class="member">
+      ${avatarTag(m.id, m.fallback, m.color)}
+      <div class="member-name">${getName(m.id, m.id)}</div>
+    </div>`;
+}
+
+function subLeaderAvatarTag(leader) {
+  const entry = DATA[leader.id];
+  const icono = entry && entry.icono ? entry.icono.trim() : '';
+  const cls   = `sub-leader-avatar ${leader.color}`;
+  if (icono) {
+    return `<div class="${cls}">
+      <img src="iconos/${icono}" alt="${leader.fallback}"
+        onerror="this.style.display='none'; this.parentElement.innerHTML='${leader.fallback}'"/>
+    </div>`;
+  }
+  return `<div class="${cls}">${leader.fallback}</div>`;
+}
+
+function subPanelHTML(sp) {
+  const leaderBlock = sp.leader ? `
+    <div class="sub-leader">
+      ${subLeaderAvatarTag(sp.leader)}
+      <div class="sub-leader-name">${getName(sp.leader.id, sp.title)}</div>
+    </div>` : '';
+
+  return `
+    <div class="sub-panel sub-panel--yellow">
+      <div class="panel-title">${sp.title}</div>
+      ${leaderBlock}
+      <div class="member-grid">${sp.members.map(memberHTML).join('')}</div>
+    </div>`;
+}
+
+function topPanelHTML(p, delay) {
+  const lName = getName(p.leader.id, p.leaderLabel);
+  return `
+    <div class="panel ${p.panelClass}" style="animation-delay:${delay}s">
+      <div class="leader">
+        ${avatarTag(p.leader.id, p.leader.fallback, p.leader.color, true)}
+        <div class="leader-name">${lName}</div>
+      </div>
+      ${p.direct.length
+        ? `<div class="member-grid" style="margin-bottom:${p.subs.length ? 16 : 0}px">
+             ${p.direct.map(memberHTML).join('')}
+           </div>`
+        : ''}
+      ${p.subs.map(subPanelHTML).join('')}
+    </div>`;
+}
+
+function bottomPanelHTML(p, delay) {
+  return `
+    <div class="panel ${p.panelClass}" style="animation-delay:${delay}s">
+      <div class="panel-title">${p.title}</div>
+      <div class="member-grid">${p.members.map(memberHTML).join('')}</div>
+    </div>`;
+}
+
+function renderChart() {
+  const topHTML = ORG.top.map((p, i)    => topPanelHTML(p,    0.05 + i * 0.07)).join('');
+  const botHTML = ORG.bottom.map((p, i) => bottomPanelHTML(p, 0.28 + i * 0.07)).join('');
+
+  document.getElementById('chart').innerHTML = `
+    <p class="section-label">Vertientes principales</p>
+    <div class="top-row">${topHTML}</div>
+    <div class="divider"><hr/><span class="divider-label">Sectores adyacentes</span><hr/></div>
+    <div class="bottom-row">${botHTML}</div>
+    <p class="tip">LLA · Vertientes Tuiteras · Mapa de facciones</p>
+  `;
+
+  document.getElementById('chart').style.display   = 'block';
+  document.getElementById('loading').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════════════════
+//  INIT: cargar CSV → renderizar
+// ══════════════════════════════════════════════════════════
+async function init() {
+  try {
+    const res = await fetch('iconos.csv');
+    if (!res.ok) throw new Error(`HTTP ${res.status} — archivo no encontrado`);
+    DATA = parseCSV(await res.text());
+  } catch (err) {
+    console.warn('CSV no cargado:', err.message);
+    DATA = {};
+    const el = document.getElementById('error-msg');
+    el.innerHTML = `⚠️ No se encontró <code>iconos.csv</code> — se muestran los textos de respaldo.<br>
+      Asegurate de que el archivo esté en la misma carpeta que el HTML.<br>
+      <small style="opacity:.5">${err.message}</small>`;
+    el.style.display = 'block';
+  }
+  renderChart();
+}
+
+init();
+</script>
+</body>
+</html>
